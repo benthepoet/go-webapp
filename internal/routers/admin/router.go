@@ -3,7 +3,6 @@ package admin
 import (
 	"net/http"
 
-	"github.com/benthepoet/go-webapp/internal/mime"
 	"github.com/benthepoet/go-webapp/internal/response"
 	"github.com/benthepoet/go-webapp/internal/templates"
 	"github.com/go-chi/chi/v5"
@@ -24,7 +23,7 @@ func getIndex(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		response.InternalError(w)
 	} else {
-		response.Ok(w, html, mime.HTML)
+		response.Ok(w, html, response.ContentTypeHTML)
 	}
 }
 
@@ -33,6 +32,6 @@ func getProducts(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		response.InternalError(w)
 	} else {
-		response.Ok(w, html, mime.HTML)
+		response.Ok(w, html, response.ContentTypeHTML)
 	}
 }

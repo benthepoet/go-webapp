@@ -5,6 +5,8 @@ import (
 	"net/http"
 )
 
+const ContentTypeHTML = "text/html"
+
 func InternalError(w http.ResponseWriter) {
 	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 }
