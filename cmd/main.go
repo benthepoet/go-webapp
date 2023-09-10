@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/benthepoet/go-webapp/internal/middleware"
 	"github.com/benthepoet/go-webapp/internal/routers/admin"
 	"github.com/go-chi/chi/v5"
 )
@@ -11,7 +12,7 @@ import (
 func main() {
 	r := chi.NewRouter()
 
-	r.Use(secureHeaders)
+	r.Use(middleware.Helmet)
 
 	r.Mount("/admin", admin.New())
 
@@ -23,13 +24,4 @@ func main() {
 	}
 
 	srv.ListenAndServe()
-}
-
-func secureHeaders(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("strict-transport-security", "max-age=15552000; includeSubDomains")
-		w.Header().Set("x-content-type-options", "nosniff")
-		w.Header().Set("x-frame-options", "DENY")
-		next.ServeHTTP(w, r)
-	})
 }
