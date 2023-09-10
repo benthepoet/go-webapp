@@ -37,7 +37,7 @@ func getProducts(w http.ResponseWriter, r *http.Request) {
 }
 
 func HTML(w http.ResponseWriter, c int, h string) {
-	w.Header().Set("Content-Type", "text/html")
+	w.Header().Set("content-type", "text/html; charset=utf-8")
 	w.WriteHeader(c)
 	io.WriteString(w, h)
 }
