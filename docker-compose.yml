@@ -1,0 +1,9 @@
+services:
+  firebird:
+    container_name: firebird
+    image: jacobalberty/firebird:latest
+    restart: always
+    ports:
+      - 127.0.0.1:3050:3050
+    volumes:
+      - ./data:/firebird
