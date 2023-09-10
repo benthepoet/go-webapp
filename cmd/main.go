@@ -1,34 +1,23 @@
 package main
 
 import (
-	"io"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/benthepoet/go-webapp/internal/routers/admin"
-	"github.com/julienschmidt/httprouter"
+	"github.com/go-chi/chi/v5"
 )
 
-type PrefixRouter struct {
-	prefixes map[string]*httprouter.Router
-	root     *httprouter.Router
-}
-
 func main() {
-	p := &PrefixRouter{root: httprouter.New(), prefixes: map[string]*httprouter.Router{}}
+	r := chi.NewRouter()
 
-	p.root.GET("/", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		io.WriteString(w, "Hello")
-	})
+	r.Use(secureHeaders)
 
-	a := admin.New()
-
-	p.prefixes["/admin"] = a.Router
+	r.Mount("/admin", admin.New())
 
 	srv := &http.Server{
 		Addr:         ":8080",
-		Handler:      p,
+		Handler:      r,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
@@ -36,20 +25,11 @@ func main() {
 	srv.ListenAndServe()
 }
 
-func (p *PrefixRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	secureHeaders(w)
-
-	for k, v := range p.prefixes {
-		if strings.HasPrefix(r.URL.Path, k) {
-			v.ServeHTTP(w, r)
-			return
-		}
-	}
-
-	p.root.ServeHTTP(w, r)
-}
-
-func secureHeaders(w http.ResponseWriter) {
-	w.Header().Set("X-Content-Type-Options", "nosniff")
-	w.Header().Set("X-Frame-Options", "DENY")
+func secureHeaders(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Strict-Transport-Security", "max-age=15552000; includeSubDomains")
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Header().Set("X-Frame-Options", "DENY")
+		next.ServeHTTP(w, r)
+	})
 }

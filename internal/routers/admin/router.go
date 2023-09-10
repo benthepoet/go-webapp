@@ -5,28 +5,26 @@ import (
 	"net/http"
 
 	"github.com/benthepoet/go-webapp/internal/templates"
-	"github.com/julienschmidt/httprouter"
+	"github.com/go-chi/chi/v5"
 )
 
-const pathPrefix = "/admin"
-
-type AdminRouter struct {
-	Router          *httprouter.Router
+type Admin struct {
 	TemplateManager *templates.TemplateManager
 }
 
-func New() *AdminRouter {
-	r := httprouter.New()
+func New() *chi.Mux {
+	r := chi.NewRouter()
+
 	t := templates.New("./internal/templates/admin", ".mustache")
-	a := &AdminRouter{r, t}
+	a := &Admin{t}
 
-	r.GET(pathPrefix, a.index)
-	r.GET(pathPrefix+"/products", a.products)
+	r.Get("/", a.index)
+	r.Get("/products", a.products)
 
-	return a
+	return r
 }
 
-func (a *AdminRouter) index(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (a *Admin) index(w http.ResponseWriter, r *http.Request) {
 	h, err := a.TemplateManager.RenderInLayout("index", "layout", map[string]string{"title": "Home"})
 	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
@@ -35,7 +33,7 @@ func (a *AdminRouter) index(w http.ResponseWriter, r *http.Request, p httprouter
 	}
 }
 
-func (a *AdminRouter) products(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (a *Admin) products(w http.ResponseWriter, r *http.Request) {
 	h, err := a.TemplateManager.RenderInLayout("products", "layout", map[string]string{"title": "Products"})
 	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
