@@ -1,9 +1,10 @@
 package admin
 
 import (
-	"io"
 	"net/http"
 
+	"github.com/benthepoet/go-webapp/internal/mime"
+	"github.com/benthepoet/go-webapp/internal/response"
 	"github.com/benthepoet/go-webapp/internal/templates"
 	"github.com/go-chi/chi/v5"
 )
@@ -19,29 +20,19 @@ func NewRouter() *chi.Mux {
 }
 
 func getIndex(w http.ResponseWriter, r *http.Request) {
-	h, err := tplMan.RenderInLayout("index", "layout", map[string]string{"title": "Home"})
+	html, err := tplMan.RenderInLayout("index", "layout", map[string]string{"title": "Home"})
 	if err != nil {
-		internalError(w)
+		response.InternalError(w)
 	} else {
-		HTML(w, http.StatusOK, h)
+		response.Ok(w, html, mime.HTML)
 	}
 }
 
 func getProducts(w http.ResponseWriter, r *http.Request) {
-	h, err := tplMan.RenderInLayout("products", "layout", map[string]string{"title": "Products"})
+	html, err := tplMan.RenderInLayout("products", "layout", map[string]string{"title": "Products"})
 	if err != nil {
-		internalError(w)
+		response.InternalError(w)
 	} else {
-		HTML(w, http.StatusOK, h)
+		response.Ok(w, html, mime.HTML)
 	}
-}
-
-func HTML(w http.ResponseWriter, c int, h string) {
-	w.Header().Set("content-type", "text/html; charset=utf-8")
-	w.WriteHeader(c)
-	io.WriteString(w, h)
-}
-
-func internalError(w http.ResponseWriter) {
-	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 }
