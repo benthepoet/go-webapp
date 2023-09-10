@@ -13,6 +13,7 @@ func main() {
 	r := chi.NewRouter()
 
 	r.Use(middlewares.Helmet)
+	r.Use(middlewares.BasicAuth)
 
 	r.Mount("/admin", admin.NewRouter())
 	r.Mount("/debug", middleware.Profiler())

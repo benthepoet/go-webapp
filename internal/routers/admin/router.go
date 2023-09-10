@@ -21,18 +21,18 @@ func NewRouter() *chi.Mux {
 func getIndex(w http.ResponseWriter, r *http.Request) {
 	h, err := tplMan.RenderInLayout("index", "layout", map[string]string{"title": "Home"})
 	if err != nil {
-		http.Error(w, http.StatusText(500), 500)
+		internalError(w)
 	} else {
-		HTML(w, 200, h)
+		HTML(w, http.StatusOK, h)
 	}
 }
 
 func getProducts(w http.ResponseWriter, r *http.Request) {
 	h, err := tplMan.RenderInLayout("products", "layout", map[string]string{"title": "Products"})
 	if err != nil {
-		http.Error(w, http.StatusText(500), 500)
+		internalError(w)
 	} else {
-		HTML(w, 200, h)
+		HTML(w, http.StatusOK, h)
 	}
 }
 
@@ -40,4 +40,8 @@ func HTML(w http.ResponseWriter, c int, h string) {
 	w.Header().Set("content-type", "text/html; charset=utf-8")
 	w.WriteHeader(c)
 	io.WriteString(w, h)
+}
+
+func internalError(w http.ResponseWriter) {
+	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 }
