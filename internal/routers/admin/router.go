@@ -10,7 +10,7 @@ import (
 
 var tplMan *templates.TemplateManager = templates.New("./internal/templates/admin", ".mustache")
 
-func New() *chi.Mux {
+func NewRouter() *chi.Mux {
 	r := chi.NewRouter()
 	r.Get("/", getIndex)
 	r.Get("/products", getProducts)

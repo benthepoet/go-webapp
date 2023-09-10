@@ -2,25 +2,24 @@ package main
 
 import (
 	"net/http"
-	"time"
 
-	"github.com/benthepoet/go-webapp/internal/middleware"
+	"github.com/benthepoet/go-webapp/internal/middlewares"
 	"github.com/benthepoet/go-webapp/internal/routers/admin"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 func main() {
 	r := chi.NewRouter()
 
-	r.Use(middleware.Helmet)
+	r.Use(middlewares.Helmet)
 
-	r.Mount("/admin", admin.New())
+	r.Mount("/admin", admin.NewRouter())
+	r.Mount("/debug", middleware.Profiler())
 
 	srv := &http.Server{
-		Addr:         ":8080",
-		Handler:      r,
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
+		Addr:    ":8080",
+		Handler: r,
 	}
 
 	srv.ListenAndServe()
