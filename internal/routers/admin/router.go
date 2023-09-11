@@ -9,8 +9,14 @@ import (
 )
 
 var tplMan *templates.TemplateManager = templates.New("./internal/templates/admin", ".mustache")
+var tm *templates.TM = templates.NewTM("./internal/templates/admin", map[string][]string{
+	"index":            {"index.html", "layout.html"},
+	"products":         {"products.html", "layout.html"},
+	"products-partial": {"products-partial.html"},
+})
 
 func NewRouter() *chi.Mux {
+
 	r := chi.NewRouter()
 	r.Get("/", getIndex)
 	r.Get("/products", getProducts)

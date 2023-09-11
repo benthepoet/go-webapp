@@ -2,6 +2,7 @@ package templates
 
 import (
 	"errors"
+	"html/template"
 	"log"
 	"os"
 	"strings"
@@ -9,8 +10,22 @@ import (
 	"github.com/cbroglie/mustache"
 )
 
+type TM struct {
+	templates map[string]*template.Template
+}
+
 type TemplateManager struct {
 	templates map[string]*mustache.Template
+}
+
+func NewTM(r string, m map[string][]string) *TM {
+	t := &TM{make(map[string]*template.Template)}
+
+	for k, v := range m {
+		t.templates[k] = template.Must(template.ParseFiles(v...))
+	}
+
+	return t
 }
 
 func New(p string, e string) *TemplateManager {
