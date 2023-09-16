@@ -10,9 +10,8 @@ import (
 
 var tplMan *templates.TemplateManager = templates.New("./internal/templates/admin", ".mustache")
 var tm *templates.TM = templates.NewTM("./internal/templates/admin", map[string][]string{
-	"index":            {"index.html", "layout.html"},
-	"products":         {"products.html", "layout.html"},
-	"products-partial": {"products-partial.html"},
+	"index":    {"index.html", "base.html"},
+	"products": {"products.html", "base.html"},
 })
 
 func NewRouter() *chi.Mux {
@@ -25,7 +24,7 @@ func NewRouter() *chi.Mux {
 }
 
 func getIndex(w http.ResponseWriter, r *http.Request) {
-	html, err := tplMan.RenderInLayout("index", "layout", map[string]string{"title": "Home"})
+	html, err := tm.RenderInLayout("index", "base", map[string]string{"title": "Home"})
 	if err != nil {
 		response.InternalError(w)
 	} else {
@@ -34,7 +33,7 @@ func getIndex(w http.ResponseWriter, r *http.Request) {
 }
 
 func getProducts(w http.ResponseWriter, r *http.Request) {
-	html, err := tplMan.RenderInLayout("products", "layout", map[string]string{"title": "Products"})
+	html, err := tm.RenderInLayout("products", "base", map[string]string{"title": "Products"})
 	if err != nil {
 		response.InternalError(w)
 	} else {

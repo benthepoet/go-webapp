@@ -1,0 +1,140 @@
+{{block "base" .}}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://unpkg.com/htmx.org@1.9.5"></script>
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
+    <style>
+        .off-canvas {
+            min-height: 100vh;
+        }
+
+        .off-canvas-sidebar {
+            width: 12rem;
+            padding: 1rem;
+        }
+
+        .off-canvas-sidebar .accordion {
+            font-size: .7rem;
+        }
+
+        button.user-menu {
+            position: relative;
+            left: 1.4rem;
+            bottom: .2rem;
+        }
+
+        .off-canvas main.off-canvas-content {
+            width: calc(100vw - 12rem);
+            padding: 0;
+        }
+
+        .header-title {
+            padding: .8rem .5rem .5rem .8rem;
+
+        }
+
+        .page-content {
+            padding: .8rem
+        }
+
+        .left-menu {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="off-canvas off-canvas-sidebar-show">
+
+        <div id="sidebar-id" class="off-canvas-sidebar">
+            <h5 class="d-inline-block">Admin UI <small class="label">v1.0</small></h5>
+            <button class="btn btn-action btn-primary user-menu d-inline-block">
+                <i class="icon icon-people"></i>
+            </button>
+
+            <div class="left-menu">
+                <div class="accordion">
+                    <input type="radio" id="accordion-1" name="accordion-radio" hidden>
+                    <label class="accordion-header" for="accordion-1">
+                        <i class="icon icon-arrow-right mr-1"></i>
+                        Contact Management
+                    </label>
+                    <div class="accordion-body">
+                        <ul class="menu menu-nav">
+                            <li class="menu-item">
+                                <a href="/admin/companies">Companies</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="/admin/contacts">Contacts</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="accordion">
+                    <input type="radio" id="accordion-4" name="accordion-radio" hidden>
+                    <label class="accordion-header" for="accordion-4">
+                        <i class="icon icon-arrow-right mr-1"></i>
+                        Order Management
+                    </label>
+                    <div class="accordion-body">
+                        <ul class="menu menu-nav">
+                            <li class="menu-item">
+                                <a href="/admin/sales-orders">Sales Orders</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="accordion">
+                    <input type="radio" id="accordion-2" name="accordion-radio" hidden>
+                    <label class="accordion-header" for="accordion-2">
+                        <i class="icon icon-arrow-right mr-1"></i>
+                        Product Management
+                    </label>
+                    <div class="accordion-body">
+                        <ul class="menu menu-nav">
+                            <li class="menu-item">
+                                <a href="/admin/products">Products</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="accordion">
+                    <input type="radio" id="accordion-3" name="accordion-radio" hidden>
+                    <label class="accordion-header" for="accordion-3">
+                        <i class="icon icon-arrow-right mr-1"></i>
+                        Store Management
+                    </label>
+                    <div class="accordion-body">
+                        <ul class="menu menu-nav">
+                            <li class="menu-item">
+                                <a href="/admin/stores">Stores</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="/admin/stores">Logins</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <main class="off-canvas-content">
+            <div class="header-title">
+                <h4>{{.title}}</h4>
+                <div class="divider"></div>
+            </div>
+            <div class="page-content">
+                {{template "content" .}}
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
+{{end}}
