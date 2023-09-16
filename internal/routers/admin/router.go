@@ -8,8 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-var tplMan *templates.TemplateManager = templates.New("./internal/templates/admin", ".mustache")
-var tm *templates.TM = templates.NewTM("./internal/templates/admin", map[string][]string{
+var tplMan *templates.TM = templates.NewTM("./internal/templates/admin", map[string][]string{
 	"index":    {"index.html", "base.html"},
 	"products": {"products.html", "base.html"},
 })
@@ -24,7 +23,7 @@ func NewRouter() *chi.Mux {
 }
 
 func getIndex(w http.ResponseWriter, r *http.Request) {
-	html, err := tm.RenderInLayout("index", "base", map[string]string{"title": "Home"})
+	html, err := tplMan.RenderInLayout("index", "base", map[string]string{"title": "Home"})
 	if err != nil {
 		response.InternalError(w)
 	} else {
@@ -33,7 +32,7 @@ func getIndex(w http.ResponseWriter, r *http.Request) {
 }
 
 func getProducts(w http.ResponseWriter, r *http.Request) {
-	html, err := tm.RenderInLayout("products", "base", map[string]string{"title": "Products"})
+	html, err := tplMan.RenderInLayout("products", "base", map[string]string{"title": "Products"})
 	if err != nil {
 		response.InternalError(w)
 	} else {
